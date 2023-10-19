@@ -2,16 +2,26 @@ import { useState } from "react"
 
 export default function home() {
     const [textInput, setTextInput] = useState("")
-    const [arrayTarefas, setTarefas] = useState(["primeiro"])
-    const [arrayTarefasConcluidas, setTarefasConcluidas] = useState([""])
+    const [arrayTarefas, setArrayTarefas] = useState([])
+    const [arrayTarefasConcluidas, setTarefasConcluidas] = useState([])
     
     function adicionar(){
         //alert("Adicionou um item")
         let textSemEspaco = textInput.trim()
         if(textSemEspaco.length > 0) {
-            setTarefas(arrayTarefas => [... arrayTarefas, textInput])
+            setArrayTarefas(arrayTarefas => [... arrayTarefas, textInput])
             setTextInput("")
         }
+    }
+
+    function excluirItem(index){
+        setArrayTarefas(arrayTarefas.filter((item, i) => index != i))
+
+    }
+
+    function concluirTarefa (index){
+        setTarefasConcluidas(arrayTarefas.filter((item, i) => index === i))
+        excluirItem(index)
     }
 
     return (
@@ -21,8 +31,8 @@ export default function home() {
         {/** Listatagem das taferas */}
         <div>
             {arrayTarefas.map((item, index) =><li key={index}>{item} 
-            <span>o</span>
-            <span>x</span>
+            <span onClick={ ()=> concluirTarefa(index)}>o</span>
+            <span onClick={()=> excluirItem(index)}>x</span>
             </li>)}
         </div>
         
@@ -34,7 +44,10 @@ export default function home() {
         
         {/*Listagem de tarefas concluidas*/}
         <div>
-            <li></li>
+        <div>
+            {arrayTarefasConcluidas.map((item, index) =><li key={index}>{item} 
+            </li>)}
+        </div>
         </div>
 
         </>
